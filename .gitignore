@@ -1,0 +1,26 @@
+# Secrets / credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*
+*secrets*
+**/secrets/
+**/credentials/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local media / recordings
+*.mp3
+*.wav
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

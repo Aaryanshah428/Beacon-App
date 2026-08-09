@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Beacon — a voice and camera companion demo for blind and low-vision users." />
+  <title>Beacon — Assistive Voice Companion (Demo)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <div class="bg" aria-hidden="true"></div>
+
+  <div id="srAnnouncer" class="sr-only" aria-live="assertive" aria-atomic="true"></div>
+
+  <header class="demo-banner" role="note">
+    <p>
+      <span class="demo-badge">Demo template</span>
+      Built for blind and low-vision users. Voice-first; camera assists when you ask.
+    </p>
+  </header>
+
+  <main id="main" class="app">
+    <header class="brand">
+      <h1 class="brand-name">Beacon</h1>
+      <p class="tagline">Speak to explore your surroundings. This is a starter template you can customize.</p>
+    </header>
+
+    <section class="stage" aria-labelledby="mic-heading">
+      <h2 id="mic-heading" class="sr-only">Voice control</h2>
+
+      <button
+        id="micBtn"
+        class="mic-btn"
+        type="button"
+        aria-pressed="false"
+        aria-label="Start listening. Double-tap or press Space to talk."
+      >
+        <span class="mic-ring" aria-hidden="true"></span>
+        <span class="mic-core" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 2a3.5 3.5 0 0 0-3.5 3.5v6a3.5 3.5 0 0 0 7 0v-6A3.5 3.5 0 0 0 12 2Z" />
+            <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" />
+            <path d="M12 18v3" />
+            <path d="M8.5 21h7" />
+          </svg>
+        </span>
+      </button>
+
+      <p id="status" class="status" role="status" aria-live="polite">
+        Tap Allow access, then hold the mic or press Space to talk
+      </p>
+
+      <div id="waveform" class="waveform" hidden aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </section>
+
+    <section class="commands" aria-labelledby="commands-heading">
+      <h2 id="commands-heading" class="section-title">What you can say</h2>
+      <p class="section-lead">Or tap a shortcut below. Beacon answers out loud.</p>
+      <div class="command-grid" role="group" aria-label="Voice command shortcuts">
+        <button type="button" class="command-btn" data-command="help" aria-label="Hear help. Says what you can ask.">
+          <span class="command-name">Help</span>
+          <span class="command-desc">Hear the commands</span>
+        </button>
+        <button type="button" class="command-btn" data-command="read this label" aria-label="Read this label. Opens camera and reads text aloud.">
+          <span class="command-name">Read label</span>
+          <span class="command-desc">Say “read this label”</span>
+        </button>
+        <button type="button" class="command-btn" data-command="describe this" aria-label="Describe this. Opens camera and describes the scene.">
+          <span class="command-name">Describe scene</span>
+          <span class="command-desc">Say “describe this”</span>
+        </button>
+        <button type="button" class="command-btn" data-command="capture this" aria-label="Capture this. Opens camera for navigation guidance.">
+          <span class="command-name">Navigate</span>
+          <span class="command-desc">Say “capture this”</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="controls" aria-labelledby="controls-heading">
+      <h2 id="controls-heading" class="section-title">Access &amp; sound</h2>
+      <div class="voice-controls">
+        <button
+          id="permissionBtn"
+          class="control-btn"
+          type="button"
+          aria-label="Allow microphone and camera access"
+        >
+          Allow mic &amp; camera
+        </button>
+        <button
+          id="welcomeBtn"
+          class="control-btn"
+          type="button"
+          aria-label="Hear welcome instructions again"
+        >
+          Hear intro
+        </button>
+        <button
+          id="flipCameraBtn"
+          class="control-btn active"
+          type="button"
+          aria-pressed="true"
+          aria-label="Flip camera image horizontally. Currently on."
+        >
+          Flip camera: On
+        </button>
+        <button
+          id="muteBtn"
+          class="control-btn"
+          type="button"
+          aria-pressed="false"
+          aria-label="Mute AI voice"
+        >
+          Mute voice
+        </button>
+        <label class="volume-label" for="volumeSlider">
+          Volume
+          <input
+            id="volumeSlider"
+            class="volume-slider"
+            type="range"
+            min="0"
+            max="100"
+            value="85"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="85"
+            aria-label="AI voice volume"
+          />
+        </label>
+      </div>
+    </section>
+
+    <section class="type-fallback" aria-labelledby="type-heading">
+      <h2 id="type-heading" class="section-title">Type instead</h2>
+      <form id="textForm" class="text-form">
+        <label class="sr-only" for="textInput">Type a message or command</label>
+        <input
+          id="textInput"
+          class="text-input"
+          type="text"
+          autocomplete="off"
+          placeholder="Type a question or command…"
+          aria-describedby="type-hint"
+        />
+        <button id="sendBtn" class="send-btn" type="submit">Send</button>
+      </form>
+      <p id="type-hint" class="type-hint">Useful if speech recognition misses you.</p>
+    </section>
+
+    <section aria-labelledby="chat-heading">
+      <h2 id="chat-heading" class="section-title">Conversation</h2>
+      <div id="chatLog" class="chat-log" aria-live="polite" aria-relevant="additions">
+        <p class="chat-empty">Your conversation will appear here and be spoken aloud.</p>
+      </div>
+    </section>
+
+    <details class="res-panel">
+      <summary class="res-summary">Camera resolution (for developers)</summary>
+      <div class="res-body">
+        <p><span class="res-label">Captured</span> <span id="resCaptured">—</span></p>
+        <p><span class="res-label">Sent to vision model</span> <span id="resSent">—</span></p>
+        <p><span class="res-label">High-detail view</span> <span id="resOpenAI">—</span></p>
+        <p class="res-note">Demo template detail: full JPEG upload; vision model may rescale for analysis.</p>
+      </div>
+    </details>
+
+    <footer class="footer">
+      <p class="hint">
+        Keyboard: <kbd>Space</kbd> start/stop listening.
+        Voice tips: ask anything, or say <strong>help</strong>, <strong>read this label</strong>,
+        <strong>describe this</strong>, or <strong>capture this</strong> plus a question.
+      </p>
+      <p class="template-note">Beacon is a non-production template for assistive-tech demos and hackathons.</p>
+    </footer>
+  </main>
+
+  <div id="cameraOverlay" class="camera-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="cameraTitle">
+    <div class="camera-panel">
+      <p id="cameraTitle" class="camera-title">Point the camera ahead</p>
+      <video id="cameraPreview" class="camera-preview" playsinline autoplay muted aria-label="Live camera preview"></video>
+      <p id="cameraStatus" class="camera-status" role="status" aria-live="assertive">Capturing in a moment…</p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
